@@ -1,6 +1,10 @@
 package autoria.dto;
 
 import autoria.entity.Roles;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,9 +13,9 @@ import lombok.Data;
 public class UserDTO {
     private Long id;
 
-    private String name;
+    private String firstName;
 
-    private String surname;
+    private String lastName;
 
     private String email;
 

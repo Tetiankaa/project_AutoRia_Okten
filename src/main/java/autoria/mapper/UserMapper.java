@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface UserMapper {
 
+
     UserDTO convertToDto(User user);
 
     User convertToUser(UserDTO userDTO);

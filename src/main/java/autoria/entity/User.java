@@ -2,8 +2,7 @@ package autoria.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +13,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Setter
+@Getter
 public class User implements UserDetails {
 
     @Id
@@ -24,25 +26,23 @@ public class User implements UserDetails {
 
     @NotEmpty(message = "Name may not be empty")
     @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters long")
-    @Pattern(regexp = "^[a-zA-Z]+$")
-    private String name;
+    private String firstName;
 
     @NotEmpty(message = "Surname may not be empty")
     @Size(min = 2, max = 50, message = "Surname must be between 2 and 50 characters long")
-    @Pattern(regexp = "^[a-zA-Z]+$")
-    private String surname;
+    private String lastName;
 
     @NotEmpty(message = "Email may not be empty")
-    @Pattern(regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$", message = "Email address must be in a valid format (Example: user12@example.com)")
+    @Pattern(regexp = "^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$", message = "Email address must be in a valid format (Example: user@example.com)")
     @Column(unique = true)
     private String email;
 
     @NotEmpty(message = "Phone number may not be empty")
-    @Pattern(regexp = "^\\+?3?8?(0[\\s-]\\d{2}[\\s-]\\d{3}[\\s-]\\d{2}[\\s-]\\d{2})$", message = "Phone number must be in a valid format (Example: +380679638574)")
+    @Pattern(regexp = "^(\\+380)?(50|67|9[1-9]|73|39|80)\\d{7}$", message = "Phone number must be in a valid format (Example: +380679638574)")
     private String phone;
 
     @NotEmpty(message = "Password may not be empty")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*)(?=.*[@$!%*#?&])[A-Za-z@$!%*#?&]{8,}$", message = "Password must have minimum 8 characters, at least one letter, one number and one special character")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[^\\s]{8,}$", message = "Password must have minimum 8 characters, at least one lowercase  letter, one uppercase letter and at least one digit")
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -64,6 +64,11 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -82,4 +87,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

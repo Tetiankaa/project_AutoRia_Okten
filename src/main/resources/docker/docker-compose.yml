@@ -9,4 +9,4 @@ services:
     env_file:
       - .env_mysql
     volumes:
-      - .data-mysql:/var/lib/mysql
+      - .mysql-data:/var/lib/mysql

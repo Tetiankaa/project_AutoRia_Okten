@@ -14,16 +14,17 @@
     <name>project_AutoRia_Okten</name>
     <description>project_AutoRia_Okten</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>20</java.version>
 
-        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
+            <version>${mapstruct.version}</version>
         </dependency>
 
         <dependency>
@@ -101,10 +102,24 @@
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapstruct.version}</version>
+                            <version>${mapstruct.version}</version>
                         </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <dependency>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </dependency>
                     </annotationProcessorPaths>
-
+                    <compilerArgs>
+                        <compilerArg>
+                            -Amapstruct.defaultComponentModel=spring
+                        </compilerArg>
+                    </compilerArgs>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -115,6 +130,15 @@
                 </configuration>
             </plugin>
         </plugins>
+
+            <resources>
+                <resource>
+                    <directory>src/main/resources</directory>
+                    <excludes>
+                        <exclude>docker/**/*.sock</exclude>
+                    </excludes>
+                </resource>
+            </resources>
     </build>
 
 </project>
