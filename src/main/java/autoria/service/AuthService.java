@@ -4,7 +4,7 @@ import autoria.dto.AuthRequest;
 import autoria.dto.AuthResponse;
 import autoria.dto.RefreshRequest;
 import autoria.dto.UserDTO;
-import autoria.entity.Roles;
+import autoria.entity.enums.Roles;
 import autoria.entity.User;
 import autoria.exception.JwtAuthException;
 import autoria.mapper.UserMapper;

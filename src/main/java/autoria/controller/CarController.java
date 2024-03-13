@@ -1,13 +1,15 @@
 package autoria.controller;
 
-import autoria.entity.CarBrand;
+import autoria.dto.CarDTO;
+import autoria.dto.CarSuggestionDTO;
+import autoria.exception.CustomException;
 import autoria.service.CarService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,4 +28,23 @@ public class CarController {
     public ResponseEntity<List<String>> getModels(){
         return carService.getModels();
     }
+
+    @GetMapping("/currencies")
+    public ResponseEntity<List<String>> getCurrencies(){
+        return carService.getCurrencies();
+    }
+
+    @PostMapping("/sell-car")
+    public ResponseEntity<?> sellCar(@Valid @ModelAttribute CarDTO carDTO) throws IOException, CustomException {
+        return carService.saveCar(carDTO);
+    }
+    // TODO getCArByID
+
+    @PostMapping("/car-suggestion")
+    public ResponseEntity<String> suggestCar(@RequestBody CarSuggestionDTO carSuggestionDTO){
+        return carService.createCarRequest(carSuggestionDTO);
+    }
+
+
+
 }

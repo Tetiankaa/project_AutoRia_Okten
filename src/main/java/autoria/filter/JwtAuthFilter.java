@@ -51,7 +51,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             String username = jwtService.extractUsername(token);
-            System.out.println("filter " + username);
 
             if (jwtService.isRefreshToken(token, username)){
                 throw new JwtException("Refresh token can not be used for accessing resources");

@@ -10,6 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ErrorResponse {
-    private List<String> message;
+    private List<String> messages;
     private Date timestamp;
 }

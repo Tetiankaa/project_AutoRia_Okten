@@ -1,5 +1,7 @@
 package autoria.entity;
 
+import autoria.entity.enums.Account;
+import autoria.entity.enums.Roles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -48,7 +50,13 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
+    @Enumerated(EnumType.STRING)
+    private Account account;
+
     private String refreshToken;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+    private List<CarAd> ads;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

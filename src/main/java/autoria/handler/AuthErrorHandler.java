@@ -29,7 +29,7 @@ public class AuthErrorHandler implements AuthenticationEntryPoint {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage(List.of(authException.getMessage()));
+        errorResponse.setMessages(List.of(authException.getMessage()));
         errorResponse.setTimestamp(new Date(System.currentTimeMillis()));
 
         objectMapper.writeValue(response.getOutputStream(), errorResponse);

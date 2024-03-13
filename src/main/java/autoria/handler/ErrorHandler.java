@@ -1,8 +1,10 @@
 package autoria.handler;
 
 import autoria.dto.ErrorResponse;
+import autoria.exception.CustomException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,11 +21,15 @@ public class ErrorHandler {
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<ErrorResponse> handleValidationException(ConstraintViolationException exception){
 
-        List<String> messages = exception.getConstraintViolations().stream().map(ConstraintViolation::getMessage).toList();
+        List<String> messages = exception
+                .getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .toList();
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date(System.currentTimeMillis()));
-        errorResponse.setMessage(messages);
+        errorResponse.setMessages(messages);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
@@ -33,7 +39,37 @@ public class ErrorHandler {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date(System.currentTimeMillis()));
-        errorResponse.setMessage(List.of(exception.getMessage()));
+        errorResponse.setMessages(List.of(exception.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<ErrorResponse> handleMethodValidationException(MethodArgumentNotValidException exception){
+
+
+        List<String> messages = exception
+                .getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .toList();
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(new Date(System.currentTimeMillis()));
+        errorResponse.setMessages(messages);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+
+    }
+
+    @ExceptionHandler({CustomException.class})
+    public ResponseEntity<ErrorResponse> handleException(CustomException exception){
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(new Date(System.currentTimeMillis()));
+        errorResponse.setMessages(List.of(exception.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 

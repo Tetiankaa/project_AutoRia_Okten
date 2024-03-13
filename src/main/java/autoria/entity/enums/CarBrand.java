@@ -1,4 +1,4 @@
-package autoria.entity;
+package autoria.entity.enums;
 
 public enum CarBrand {
     BMW, DAEWOO;
