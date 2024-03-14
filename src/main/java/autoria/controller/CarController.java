@@ -34,15 +34,19 @@ public class CarController {
         return carService.getCurrencies();
     }
 
-    @PostMapping("/sell-car")
+    @PostMapping("/save")
     public ResponseEntity<?> sellCar(@Valid @ModelAttribute CarDTO carDTO) throws IOException, CustomException {
         return carService.saveCar(carDTO);
     }
-    // TODO getCArByID
 
-    @PostMapping("/car-suggestion")
+    @PostMapping("/suggestion")
     public ResponseEntity<String> suggestCar(@RequestBody CarSuggestionDTO carSuggestionDTO){
         return carService.createCarRequest(carSuggestionDTO);
+    }
+
+    @PatchMapping("/update-after-profanity")
+    public ResponseEntity<?> updateCarAfterProfanity(@RequestBody CarDTO carDTO){
+        return carService.updateCarAfterProfanity(carDTO);
     }
 
 

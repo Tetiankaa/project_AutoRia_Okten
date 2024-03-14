@@ -1,24 +1,25 @@
 package autoria.entity;
 
+import autoria.entity.enums.CarPostingStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
 
 @Entity
-@Table(name = "car_ads")
+@Table(name = "car_postings")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @ToString
-public class CarAd {
+public class CarPosting {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id")
     private Car car;
 
@@ -27,4 +28,8 @@ public class CarAd {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    private CarPostingStatus status;
+
+    private int profanityEdits;
 }

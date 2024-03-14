@@ -56,7 +56,7 @@ public class User implements UserDetails {
     private String refreshToken;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
-    private List<CarAd> ads;
+    private List<CarPosting> postings;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

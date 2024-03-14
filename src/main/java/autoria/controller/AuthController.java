@@ -4,6 +4,7 @@ import autoria.dto.AuthRequest;
 import autoria.dto.AuthResponse;
 import autoria.dto.RefreshRequest;
 import autoria.dto.UserDTO;
+import autoria.exception.CustomException;
 import autoria.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -20,9 +21,19 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody @Valid UserDTO userDTO){
+    @PostMapping("/register-user")
+    public ResponseEntity<AuthResponse> registerUser(@RequestBody @Valid UserDTO userDTO){
         return authService.registerUser(userDTO);
+    }
+
+    @PostMapping("/register-admin")
+    public ResponseEntity<AuthResponse> registerAdmin(@RequestBody @Valid UserDTO userDTO){
+        return authService.registerAdmin(userDTO);
+    }
+
+    @PostMapping("/register-manager")
+    public ResponseEntity<String> registerManager(@RequestBody @Valid UserDTO userDTO) throws CustomException {
+        return authService.registerManager(userDTO);
     }
 
     @PostMapping("/login")

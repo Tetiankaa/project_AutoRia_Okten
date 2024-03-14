@@ -6,9 +6,11 @@ import autoria.dto.RefreshRequest;
 import autoria.dto.UserDTO;
 import autoria.entity.enums.Roles;
 import autoria.entity.User;
+import autoria.exception.CustomException;
 import autoria.exception.JwtAuthException;
 import autoria.mapper.UserMapper;
 import autoria.repository.UserDAO;
+import autoria.util.AuthenticationUtil;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +30,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-   
+    private final AuthenticationUtil authenticationUtil;
 
 
     public ResponseEntity<AuthResponse> registerUser(UserDTO userData){
@@ -37,6 +39,29 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(userData.getPassword()));
 
         return  ResponseEntity.ok(generateTokensAndResponse(user));
+
+    }
+    public ResponseEntity<AuthResponse> registerAdmin(UserDTO userDTO) {
+        User user = mapper.convertToUser(userDTO);
+        user.setRole(Roles.ADMINISTRATOR);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+        return  ResponseEntity.ok(generateTokensAndResponse(user));
+    }
+    public ResponseEntity<String> registerManager(UserDTO userDTO) throws CustomException {
+        User authenticatedUser = authenticationUtil.getAuthenticatedUser();
+
+        if (!authenticatedUser.getRole().equals(Roles.ADMINISTRATOR)){
+            throw new CustomException("Only Administrator accounts have the permission to create Manager accounts");
+        }
+
+        User user = mapper.convertToUser(userDTO);
+        user.setRole(Roles.MANAGER);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+        userDAO.save(user);
+
+        return ResponseEntity.ok("Manager account created successfully!");
 
     }
 
@@ -108,4 +133,7 @@ public class AuthService {
 
         return authResponse;
     }
+
+
+
 }

@@ -69,9 +69,9 @@ public class Car {
 
     @NotEmpty(message = "Photo cannot be empty")
     private String photoName;
-
-    @OneToOne(mappedBy = "car")
-    private CarAd ad; // TODO check for deletion this field
+//
+//    @OneToOne(mappedBy = "car")
+//    private CarPosting posting; // TODO check for deletion this field
 
     public void setYear(int year){
         if (year > LocalDateTime.now().getYear()){

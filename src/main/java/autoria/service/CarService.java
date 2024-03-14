@@ -3,16 +3,16 @@ package autoria.service;
 import autoria.dto.CarDTO;
 import autoria.dto.CarSuggestionDTO;
 import autoria.entity.Car;
-import autoria.entity.CarAd;
+import autoria.entity.CarPosting;
 import autoria.entity.CarSuggestion;
 import autoria.entity.User;
 import autoria.entity.enums.*;
 import autoria.entity.enums.Currency;
 import autoria.exception.CustomException;
-import autoria.handler.ErrorHandler;
 import autoria.mapper.CarMapper;
+import autoria.mapper.CarPostingMapper;
 import autoria.mapper.CarSuggestionMapper;
-import autoria.repository.CarAdDAO;
+import autoria.repository.CarPostingDAO;
 import autoria.repository.CarDAO;
 import autoria.repository.CarSuggestionDAO;
 import autoria.repository.UserDAO;
@@ -33,11 +33,13 @@ public class CarService {
 
     private final CarMapper carMapper;
     private final CarDAO carDAO;
-    private final CarAdDAO carAdDAO;
+    private final CarPostingDAO carPostingDAO;
     private final UserDAO userDAO;
     private final AuthenticationUtil authenticationUtil;
     private final CarSuggestionDAO carSuggestionDAO;
     private final CarSuggestionMapper carSuggestionMapper;
+    private final ProfanityFilterService profanityService;
+    private final CarPostingMapper carPostingMapper;
 
 
     public ResponseEntity<List<String>> getBrands(){
@@ -65,8 +67,8 @@ public class CarService {
                 user.setAccount(Account.BASIC);
                 userDAO.save(user);
             }else {
-                if (user.getAccount().equals(Account.BASIC) && user.getAds().size() == 1){
-                    throw new CustomException("Basic accounts can only create 1 ad.");
+                if (user.getAccount().equals(Account.BASIC) && user.getPostings().size() == 1){
+                    throw new CustomException("Basic accounts can only create 1 posting.");
                 }
             }
             String photoName = storePhoto(carDTO.getPhoto());
@@ -74,16 +76,27 @@ public class CarService {
             Car car = carMapper.convertToCar(carDTO);
             car.setPhotoName(photoName);
 
-            Car savedCar = carDAO.save(car);
+             carDAO.save(car);
 
-            CarAd ad = new CarAd();
-            ad.setDate(new Date(System.currentTimeMillis()));
-            ad.setCar(savedCar);
-            ad.setUser(user);
+            CarPosting carPosting = new CarPosting();
 
-            carAdDAO.save(ad);
+        boolean presentProfanity = profanityService.containsProfanity(car.getDescription());
 
-            return ResponseEntity.accepted().body(carMapper.convertToDto(savedCar));
+        if (!presentProfanity){
+            carPosting.setStatus(CarPostingStatus.ACTIVE);
+        }else {
+            carPosting.setStatus(CarPostingStatus.NOT_ACTIVE);
+        }
+
+
+            carPosting.setDate(new Date(System.currentTimeMillis()));
+            carPosting.setCar(car);
+            carPosting.setUser(user);
+
+
+            carPostingDAO.save(carPosting);
+
+        return ResponseEntity.accepted().body(carPostingMapper.convertToDto(carPosting));
 
     }
 
@@ -93,6 +106,17 @@ public class CarService {
         // TODO implement sending email
         return ResponseEntity.accepted().body("Request has been successfully sent");
     }
+
+    public ResponseEntity<?> updateCarAfterProfanity(CarDTO carDTO) {
+
+        Car car = carMapper.convertToCar(carDTO);
+    }
+
+    public List<CarDTO> getAll(){
+      return  carDAO.findAll().stream().map(carMapper::convertToDto).toList();
+
+    }
+
 
     private String storePhoto(MultipartFile photo) throws IOException {
 
@@ -116,5 +140,6 @@ public class CarService {
 
         return file;
     }
+
 
 }
