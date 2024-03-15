@@ -11,6 +11,7 @@ import autoria.mapper.UserMapper;
 import autoria.repository.UserDAO;
 import autoria.util.AuthenticationUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,13 @@ public class UserService {
     public ResponseEntity<String> upgrade(){
 
         User user = authenticationUtil.getAuthenticatedUser();
+
+        if (user == null){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User not authenticated");
+        }
+
         user.setAccount(Account.PREMIUM);
+
         userDAO.save(user);
 
         return ResponseEntity.ok("Account was successfully upgraded to Premium.");

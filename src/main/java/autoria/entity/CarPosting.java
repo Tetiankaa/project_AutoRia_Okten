@@ -29,6 +29,7 @@ public class CarPosting {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
     private CarPostingStatus status;
 
     private int profanityEdits;

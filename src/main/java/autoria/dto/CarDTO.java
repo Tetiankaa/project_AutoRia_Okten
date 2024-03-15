@@ -19,7 +19,7 @@ public class CarDTO {
 
     private CarModel model;
 
-    private int year;
+    private Integer year;
 
     private Long mileage;
 

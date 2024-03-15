@@ -1,18 +1,17 @@
 package autoria.service;
 
 import autoria.dto.CarDTO;
+import autoria.dto.CarPostingDTO;
 import autoria.dto.CarSuggestionDTO;
 import autoria.entity.Car;
-import autoria.entity.CarPosting;
 import autoria.entity.CarSuggestion;
 import autoria.entity.User;
 import autoria.entity.enums.*;
 import autoria.entity.enums.Currency;
 import autoria.exception.CustomException;
+import autoria.filter.ProfanityFilter;
 import autoria.mapper.CarMapper;
-import autoria.mapper.CarPostingMapper;
 import autoria.mapper.CarSuggestionMapper;
-import autoria.repository.CarPostingDAO;
 import autoria.repository.CarDAO;
 import autoria.repository.CarSuggestionDAO;
 import autoria.repository.UserDAO;
@@ -33,13 +32,12 @@ public class CarService {
 
     private final CarMapper carMapper;
     private final CarDAO carDAO;
-    private final CarPostingDAO carPostingDAO;
     private final UserDAO userDAO;
     private final AuthenticationUtil authenticationUtil;
     private final CarSuggestionDAO carSuggestionDAO;
     private final CarSuggestionMapper carSuggestionMapper;
-    private final ProfanityFilterService profanityService;
-    private final CarPostingMapper carPostingMapper;
+    private final ProfanityFilter profanityService;
+    private final CarPostingService carPostingService;
 
 
     public ResponseEntity<List<String>> getBrands(){
@@ -58,7 +56,7 @@ public class CarService {
         return ResponseEntity.ok(currencies);
     }
 
-    public ResponseEntity<?> saveCar(CarDTO carDTO) throws IOException, CustomException {
+    public ResponseEntity<CarPostingDTO> saveCar(CarDTO carDTO) throws IOException, CustomException {
 
             User user = authenticationUtil.getAuthenticatedUser();
 
@@ -78,25 +76,11 @@ public class CarService {
 
              carDAO.save(car);
 
-            CarPosting carPosting = new CarPosting();
+            boolean containsProfanity = profanityService.containsProfanity(car.getDescription());
 
-        boolean presentProfanity = profanityService.containsProfanity(car.getDescription());
+            CarPostingDTO posting = carPostingService.createPosting(car, user, containsProfanity);
 
-        if (!presentProfanity){
-            carPosting.setStatus(CarPostingStatus.ACTIVE);
-        }else {
-            carPosting.setStatus(CarPostingStatus.NOT_ACTIVE);
-        }
-
-
-            carPosting.setDate(new Date(System.currentTimeMillis()));
-            carPosting.setCar(car);
-            carPosting.setUser(user);
-
-
-            carPostingDAO.save(carPosting);
-
-        return ResponseEntity.accepted().body(carPostingMapper.convertToDto(carPosting));
+             return ResponseEntity.accepted().body(posting);
 
     }
 
@@ -105,16 +89,6 @@ public class CarService {
         carSuggestionDAO.save(suggestion);
         // TODO implement sending email
         return ResponseEntity.accepted().body("Request has been successfully sent");
-    }
-
-    public ResponseEntity<?> updateCarAfterProfanity(CarDTO carDTO) {
-
-        Car car = carMapper.convertToCar(carDTO);
-    }
-
-    public List<CarDTO> getAll(){
-      return  carDAO.findAll().stream().map(carMapper::convertToDto).toList();
-
     }
 
 

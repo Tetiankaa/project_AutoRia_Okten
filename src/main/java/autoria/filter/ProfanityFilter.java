@@ -1,12 +1,13 @@
-package autoria.service;
+package autoria.filter;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Service
-public class ProfanityFilterService {
+@Component
+public class ProfanityFilter {
 
     private static final String PROFANITY_REGEX = "\\b(fuck|shit|damn|asshole|bitch|dick|bastard)\\b";
 

@@ -1,9 +1,13 @@
 package autoria.controller;
 
 import autoria.dto.CarDTO;
+import autoria.dto.CarPostingDTO;
 import autoria.dto.CarSuggestionDTO;
+import autoria.dto.CurrencyRateDTO;
+import autoria.entity.CurrencyRate;
 import autoria.exception.CustomException;
 import autoria.service.CarService;
+import autoria.service.CurrencyService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +39,7 @@ public class CarController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> sellCar(@Valid @ModelAttribute CarDTO carDTO) throws IOException, CustomException {
+    public ResponseEntity<CarPostingDTO> saveCar(@Valid @ModelAttribute CarDTO carDTO) throws IOException, CustomException {
         return carService.saveCar(carDTO);
     }
 
@@ -44,11 +48,12 @@ public class CarController {
         return carService.createCarRequest(carSuggestionDTO);
     }
 
-    @PatchMapping("/update-after-profanity")
-    public ResponseEntity<?> updateCarAfterProfanity(@RequestBody CarDTO carDTO){
-        return carService.updateCarAfterProfanity(carDTO);
-    }
 
-
+//    private final CurrencyService currencyService;
+//    @GetMapping
+//    public ResponseEntity<List<CurrencyRateDTO>> getCurrencies_privat() throws IOException {
+//
+//        return ResponseEntity.ok(currencyService.getCurrencyRates());
+//    }
 
 }

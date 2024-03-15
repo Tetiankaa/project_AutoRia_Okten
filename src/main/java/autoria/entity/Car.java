@@ -36,7 +36,7 @@ public class Car {
 
     @NotNull(message = "Year cannot be empty")
     @Min(value = 0, message = "Year cannot be negative")
-    private int year;
+    private Integer year;
 
     @NotNull(message = "Mileage cannot be empty")
     @Min(value = 0, message = "Mileage cannot be negative")
@@ -61,9 +61,13 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "currency_prices_id")
+    private CalculatedCurrencyPrices currencyPrices;
+
     @NotNull(message = "Price cannot be empty")
     @Min(value = 0, message = "Price should not be negative")
-    private Double price;
+    private Double enteredPrice;
 
     private String description;
 

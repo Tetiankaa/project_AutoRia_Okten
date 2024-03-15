@@ -11,5 +11,9 @@ public interface CarMapper {
 
     CarDTO convertToDto(Car car);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id",ignore = true)
+    void patchCar(@MappingTarget Car car, CarDTO source);
+
 
 }
