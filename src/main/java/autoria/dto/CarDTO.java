@@ -1,5 +1,6 @@
 package autoria.dto;
 
+import autoria.entity.CalculatedCurrencyPrices;
 import autoria.entity.enums.CarBrand;
 import autoria.entity.enums.CarModel;
 import autoria.entity.enums.Currency;
@@ -27,17 +28,19 @@ public class CarDTO {
 
     private String region;
 
+    private CalculatedCurrencyPrices currencyPrices;
+
     private String city;
 
     private String color;
 
     private Currency currency;
 
-    private Double price;
+    private Double enteredPrice;
 
     private String description;
 
-    private MultipartFile photo; // TODO make set of photos
+    private MultipartFile photo;
 
     private String photoName;
 }

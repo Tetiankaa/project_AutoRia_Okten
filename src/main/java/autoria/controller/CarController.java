@@ -48,12 +48,4 @@ public class CarController {
         return carService.createCarRequest(carSuggestionDTO);
     }
 
-
-//    private final CurrencyService currencyService;
-//    @GetMapping
-//    public ResponseEntity<List<CurrencyRateDTO>> getCurrencies_privat() throws IOException {
-//
-//        return ResponseEntity.ok(currencyService.getCurrencyRates());
-//    }
-
 }

@@ -8,6 +8,7 @@ import autoria.entity.CarPosting;
 import autoria.entity.CarPostingView;
 import autoria.entity.User;
 import autoria.entity.enums.Account;
+import autoria.entity.enums.CarBrand;
 import autoria.entity.enums.CarPostingStatus;
 import autoria.exception.CustomException;
 import autoria.mapper.CarMapper;
@@ -96,6 +97,8 @@ public class CarPostingService {
         User authenticatedUser = authenticationUtil.getAuthenticatedUser();
         CarPosting carPosting = carPostingDAO.findById(postingId).orElseThrow(() -> new CustomException("Car posting not found"));
 
+        CarBrand brand = carPosting.getCar().getBrand();
+
         if (!carPosting.getUser().getId().equals(authenticatedUser.getId())){
             throw new CustomException("Unauthorized access to posting views");
         }
@@ -104,15 +107,16 @@ public class CarPostingService {
             throw new CustomException("The posting details is not allowed for sellers with Basic account.");
         }
 
+
         Long totalViews = carPostingViewDAO.countByCarPostingId(postingId);
         Long dailyViews = carPostingViewDAO.countByCarPostingIdAndViewedAtBetween(postingId, LocalDateTime.now().minusDays(1), LocalDateTime.now());
         Long weeklyViews = carPostingViewDAO.countByCarPostingIdAndViewedAtBetween(postingId, LocalDateTime.now().minusWeeks(1), LocalDateTime.now());
         Long monthlyViews = carPostingViewDAO.countByCarPostingIdAndViewedAtBetween(postingId, LocalDateTime.now().minusMonths(1), LocalDateTime.now());
 
-        Double averagePriceUkraine = priceCalculationService.getAverageCarsPrice();
+        Double averagePriceUkraine = priceCalculationService.getAverageCarsPrice(brand);
 
         String region = carPosting.getCar().getRegion();
-        Double averagePriceByRegion = priceCalculationService.getAverageCarsPriceByRegion(region);
+        Double averagePriceByRegion = priceCalculationService.getAverageCarsPriceByRegion(region, brand);
 
         CarPostingInfo info = CarPostingInfo.builder()
                 .totalViews(totalViews)

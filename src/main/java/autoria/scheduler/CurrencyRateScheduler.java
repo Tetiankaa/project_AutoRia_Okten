@@ -5,6 +5,8 @@ import autoria.entity.CalculatedCurrencyPrices;
 import autoria.entity.CurrencyRate;
 import autoria.entity.enums.Currency;
 import autoria.entity.enums.Roles;
+import autoria.exception.CustomException;
+import autoria.repository.CalculatedCurrencyPricesDAO;
 import autoria.repository.CarDAO;
 import autoria.repository.CurrencyRateDAO;
 import autoria.service.CarService;
@@ -27,8 +29,9 @@ public class CurrencyRateScheduler {
     private final CurrencyService currencyService;
     private final CurrencyRateDAO currencyRateDAO;
     private final CarDAO carDAO;
+    private final CalculatedCurrencyPricesDAO calculatedCurrencyDAO;
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void updateCurrencyRates() throws IOException {
         Map<String, CurrencyRateDTO> currencyRates  =
                 currencyService
@@ -39,8 +42,9 @@ public class CurrencyRateScheduler {
         currencyRates
                 .values()
                 .forEach(rate->{
-
-                    CurrencyRate currencyRate = new CurrencyRate();
+                    CurrencyRate currencyRate = currencyRateDAO
+                            .findByCcy(rate.getCcy())
+                            .orElse(new CurrencyRate());
 
                     currencyRate.setCcy(rate.getCcy());
                     currencyRate.setBase_ccy(rate.getBase_ccy());
@@ -50,53 +54,20 @@ public class CurrencyRateScheduler {
 
                     currencyRateDAO.save(currencyRate);
                 });
+        Double saleEur = Double.parseDouble(currencyRates.get("EUR").getSale());
+        Double saleUsd = Double.parseDouble(currencyRates.get("USD").getSale());
+        Double buyEur = Double.parseDouble(currencyRates.get("EUR").getBuy());
+        Double buyUsd = Double.parseDouble(currencyRates.get("USD").getBuy());
 
         carDAO.findAll().forEach(car -> {
 
-            CalculatedCurrencyPrices calculatedCurrencyPrices = new CalculatedCurrencyPrices();
-                calculatedCurrencyPrices.setDate(LocalDateTime.now());
+            CalculatedCurrencyPrices calculatedCurrencyPrices = currencyService.calculateCurrencyPrices( car, saleEur, saleUsd, buyEur, buyUsd);
+            calculatedCurrencyPrices.setCar(car);
 
-            Double enteredPrice = car.getEnteredPrice();
-            Currency currency = car.getCurrency();
-
-            if (currency.equals(Currency.UAH)){
-                Double saleEur = Double.parseDouble(currencyRates.get("EUR").getSale());
-                Double saleUsd = Double.parseDouble(currencyRates.get("USD").getSale());
-
-                calculatedCurrencyPrices.setUAH(enteredPrice);
-                calculatedCurrencyPrices.setEUR(enteredPrice / saleEur);
-                calculatedCurrencyPrices.setEUR(enteredPrice / saleUsd);
-
-                calculatedCurrencyPrices.setRateUSD(saleUsd);
-                calculatedCurrencyPrices.setRateEUR(saleEur);
-            }
-            if (currency.equals(Currency.EUR)){
-                Double buyEur = Double.parseDouble(currencyRates.get("EUR").getBuy());
-                Double saleUsd = Double.parseDouble(currencyRates.get("USD").getSale());
-
-                calculatedCurrencyPrices.setEUR(enteredPrice);
-                calculatedCurrencyPrices.setUAH(enteredPrice * buyEur);
-                calculatedCurrencyPrices.setUSD(enteredPrice * buyEur / saleUsd);
-
-                calculatedCurrencyPrices.setRateUSD(saleUsd);
-                calculatedCurrencyPrices.setRateEUR(buyEur);
-            }
-            if (currency.equals(Currency.USD)){
-                Double buyEur = Double.parseDouble(currencyRates.get("EUR").getBuy());
-                Double buyUsd = Double.parseDouble(currencyRates.get("USD").getBuy());
-
-                calculatedCurrencyPrices.setUSD(enteredPrice);
-                calculatedCurrencyPrices.setUAH(enteredPrice * buyUsd);
-                calculatedCurrencyPrices.setEUR(enteredPrice * buyUsd / buyEur);
-
-                calculatedCurrencyPrices.setRateUSD(buyUsd);
-                calculatedCurrencyPrices.setRateEUR(buyEur);
-            }
+             calculatedCurrencyDAO.save(calculatedCurrencyPrices);
 
         });
 
 
     }
-
-
 }

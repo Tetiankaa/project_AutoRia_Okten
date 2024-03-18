@@ -61,8 +61,7 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "currency_prices_id")
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "car")
     private CalculatedCurrencyPrices currencyPrices;
 
     @NotNull(message = "Price cannot be empty")
@@ -73,9 +72,7 @@ public class Car {
 
     @NotEmpty(message = "Photo cannot be empty")
     private String photoName;
-//
-//    @OneToOne(mappedBy = "car")
-//    private CarPosting posting; // TODO check for deletion this field
+
 
     public void setYear(int year){
         if (year > LocalDateTime.now().getYear()){

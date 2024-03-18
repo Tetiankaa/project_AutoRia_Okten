@@ -24,10 +24,16 @@ public class CalculatedCurrencyPrices {
 
     private Double USD;
 
+    @Column(name = "rate_usd")
     private Double rateUSD;
 
     private Double EUR;
 
+    @Column(name = "rate_eur")
     private Double rateEUR;
+
+    @OneToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
 
 }

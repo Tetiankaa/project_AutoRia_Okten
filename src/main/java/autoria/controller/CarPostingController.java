@@ -21,12 +21,12 @@ public class CarPostingController {
     private final CarPostingService carPostingService;
     private final ProfanityService profanityService;
 
-    @GetMapping("/{id}") // TODO make public URL
+    @GetMapping("/{id}")
     public ResponseEntity<CarPostingDTO> getById(@PathVariable Long id) throws CustomException {
         return carPostingService.getById(id);
     }
 
-    @GetMapping // TODO make public URL
+    @GetMapping
     public ResponseEntity<List<CarPostingDTO>> getAll(){
         return carPostingService.getAll();
     }

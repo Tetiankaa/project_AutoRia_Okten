@@ -1,5 +1,6 @@
 package autoria.config;
 
+import autoria.entity.enums.Roles;
 import autoria.filter.JwtAuthFilter;
 import autoria.handler.AuthErrorHandler;
 import autoria.repository.UserDAO;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -64,6 +66,8 @@ public class WebAuthConfig {
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req->req
                         .requestMatchers("/auth/**", "/error").permitAll()
+                        .requestMatchers("/register-manager").hasRole("ADMINISTRATOR")
+                        .requestMatchers("/dealership/").hasAnyRole("MANAGER_DEALERSHIP","ADMINISTRATOR_DEALERSHIP","SALE","MECHANIC" )
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

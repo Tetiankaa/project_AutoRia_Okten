@@ -15,6 +15,4 @@ public interface UserMapper {
 
     User convertToUser(UserDTO userDTO);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-     void patchUser(@MappingTarget User target, UserDTO source); //TODO check for deletion method
 }

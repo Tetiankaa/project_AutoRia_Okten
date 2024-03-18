@@ -3,32 +3,37 @@ package autoria.service;
 import autoria.dto.CarDTO;
 import autoria.dto.CarPostingDTO;
 import autoria.dto.CarSuggestionDTO;
-import autoria.entity.Car;
-import autoria.entity.CarSuggestion;
-import autoria.entity.User;
+import autoria.entity.*;
 import autoria.entity.enums.*;
 import autoria.entity.enums.Currency;
 import autoria.exception.CustomException;
 import autoria.filter.ProfanityFilter;
 import autoria.mapper.CarMapper;
 import autoria.mapper.CarSuggestionMapper;
-import autoria.repository.CarDAO;
-import autoria.repository.CarSuggestionDAO;
-import autoria.repository.UserDAO;
+import autoria.repository.*;
+import autoria.scheduler.CurrencyRateScheduler;
 import autoria.util.AuthenticationUtil;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class CarService {
+
     private final static String DIRECTORY_FOR_PHOTOS = "CarPhotos";
+
+    @Value("${spring.mail.username}")
+    private String companyEmail;
+
 
     private final CarMapper carMapper;
     private final CarDAO carDAO;
@@ -38,8 +43,17 @@ public class CarService {
     private final CarSuggestionMapper carSuggestionMapper;
     private final ProfanityFilter profanityService;
     private final CarPostingService carPostingService;
+    private final MailService mailService;
+    private final CurrencyRateDAO currencyRateDAO;
+    private final CurrencyService currencyService;
+    private final CalculatedCurrencyPricesDAO calculatedCurrencyDAO;
+    private final CurrencyRateScheduler currencyRateScheduler;
 
 
+    @PostConstruct
+    public void updateCurrencyRatesOnStartup() throws IOException {
+        currencyRateScheduler.updateCurrencyRates();
+    }
     public ResponseEntity<List<String>> getBrands(){
         List<String> brands = Arrays.stream(CarBrand.values()).map(CarBrand::getName).toList();
         return ResponseEntity.ok(brands);
@@ -74,9 +88,21 @@ public class CarService {
             Car car = carMapper.convertToCar(carDTO);
             car.setPhotoName(photoName);
 
-             carDAO.save(car);
+        Car savedCar = carDAO.save(car);
 
-            boolean containsProfanity = profanityService.containsProfanity(car.getDescription());
+       CurrencyRate currencyEur = currencyRateDAO.findByCcy("EUR").orElseThrow();
+       CurrencyRate currencyUsd = currencyRateDAO.findByCcy("USD").orElseThrow();
+
+        Double saleEur = Double.parseDouble(currencyEur.getSale());
+        Double saleUsd = Double.parseDouble(currencyUsd.getSale());
+        Double buyEur = Double.parseDouble(currencyEur.getBuy());
+        Double buyUsd = Double.parseDouble(currencyUsd.getBuy());
+
+        CalculatedCurrencyPrices calculatedCurrencyPrices = currencyService.calculateCurrencyPrices(savedCar, saleEur, saleUsd, buyEur, buyUsd);
+        calculatedCurrencyPrices.setCar(savedCar);
+        calculatedCurrencyDAO.save(calculatedCurrencyPrices);
+
+        boolean containsProfanity = profanityService.containsProfanity(car.getDescription());
 
             CarPostingDTO posting = carPostingService.createPosting(car, user, containsProfanity);
 
@@ -87,7 +113,9 @@ public class CarService {
     public ResponseEntity<String> createCarRequest(CarSuggestionDTO carSuggestionDTO) {
         CarSuggestion suggestion = carSuggestionMapper.convertFromDto(carSuggestionDTO);
         carSuggestionDAO.save(suggestion);
-        // TODO implement sending email
+
+        mailService.sendEmail(companyEmail,"Received new car suggestion. Brand: " + suggestion.getBrand() + ", model: " + suggestion.getModel(),"Car suggestion");
+
         return ResponseEntity.accepted().body("Request has been successfully sent");
     }
 
