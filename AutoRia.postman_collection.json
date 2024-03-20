@@ -1,0 +1,644 @@
+{
+	"info": {
+		"_postman_id": "cf633d70-7e76-4a00-a094-add02b04bf5a",
+		"name": "AutoRia",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25931697"
+	},
+	"item": [
+		{
+			"name": "get posts",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiJ0YW55YWtvcnN1bjAyMDhAZ21haWwuY29tIiwiaWF0IjoxNzEwMjU3MDM3LCJleHAiOjE3MTAyNTcwNjd9.PpZAwAXU6V8yLhwuP-2Nbo8C1r-Y-W8gkxnl7zeAcX0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/posts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"Anna\",\r\n    \"lastName\":\"Korsun\",\r\n    \"email\":\"77@gmail.com\",\r\n    \"phone\":\"+380964653692\",\r\n    \"password\":\"bb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/register-user",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"register-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJTRUxMRVIiXSwic3ViIjoiNzdAZ21haWwuY29tIiwiaWF0IjoxNzEwOTQ2NDk0LCJleHAiOjE3MTA5NDgyOTR9.Ju28KFic2ulgn2hwfb4IugMBCNhni3sjQZwEXztRkzg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"Tetiana\",\r\n    \"lastName\":\"Korsun\",\r\n    \"email\":\"tanya@gmail.com\",\r\n    \"phone\":\"+380671245789\",\r\n    \"password\":\"tanya\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/register-admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"register-admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register manager",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJTRUxMRVIiXSwic3ViIjoiYmJAZ21haWwuY29tIiwiaWF0IjoxNzEwNDM3MDI2LCJleHAiOjE3MTA0Mzg4MjZ9.t6kgmu4ZMBu4Q0vrAUDt837cc_vzeEUU5MX2bP4wDB4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/register-manager",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"register-manager"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{   \"email\":\"77@gmail.com\",\r\n    \"password\":\"bb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refresh user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\":\"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3N0BnbWFpbC5jb20iLCJpYXQiOjE3MTA3MDkwMTksImV4cCI6MTc5NzEwOTAxOX0.dBIDrzh_Vy5LwXOkCwFqbSlIr0j7jg2iHDVIoPbrl_I\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/auth/refresh",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get brands",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiJ0YW55YUBnbWFpbC5jb20iLCJpYXQiOjE3MTAyNzA5ODUsImV4cCI6MTcxMDI3Mjc4NX0.ZrjuDaOZUxT4QJygvFTgbqhZnhr53NiJuLeL99C01tE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8080/cars/brands",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cars",
+						"brands"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get models",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiJiYmFubmFAZ21haWwuY29tIiwiaWF0IjoxNzEwNzA3NzgxLCJleHAiOjE3MTA3MDk1ODF9.so2hTgeAHoLiYxQjPuxEY5_hzpDxYvMkf2pXWxGMzgM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/cars/models",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cars",
+						"models"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get currencies",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiJrYXR5YUBnbWFpbC5jb20iLCJpYXQiOjE3MTAzMzQ4ODgsImV4cCI6MTcxMDMzNjY4OH0.pUnzAn1vqd11QA2Z5FaOBxZNNAbwajml2l0Yb0qxKRk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/cars/currencies",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cars",
+						"currencies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save car",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiI3N0BnbWFpbC5jb20iLCJpYXQiOjE3MTA3NTI5MzIsImV4cCI6MTcxMDc1NDczMn0.b5C0rnNshNBeA7EYkuwm6UeVp3MpOPt261JD_YzeN4Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "type",
+							"value": "car",
+							"type": "text"
+						},
+						{
+							"key": "brand",
+							"value": "BMW",
+							"type": "text"
+						},
+						{
+							"key": "model",
+							"value": "X5",
+							"type": "text"
+						},
+						{
+							"key": "year",
+							"value": "2018",
+							"type": "text"
+						},
+						{
+							"key": "mileage",
+							"value": "10000",
+							"type": "text"
+						},
+						{
+							"key": "bodyType",
+							"value": "4-door",
+							"type": "text"
+						},
+						{
+							"key": "region",
+							"value": "Lviv",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "Lviv",
+							"type": "text"
+						},
+						{
+							"key": "color",
+							"value": "Red",
+							"type": "text"
+						},
+						{
+							"key": "currency",
+							"value": "UAH",
+							"type": "text"
+						},
+						{
+							"key": "enteredPrice",
+							"value": "90000",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "eliable 2018 Honedan is perfect for everyday commuting. It has a clean title and has been well-maintained.",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/C:/Users/Yevhenii/Downloads/BMW_X5_G05_black_(2).jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/cars/save",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cars",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "car suggest",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiI3N0BnbWFpbC5jb20iLCJpYXQiOjE3MTA3MDkzNTAsImV4cCI6MTcxMDcxMTE1MH0.Lx3ocfGO3owcChi86TZgMe9mpzHEAznHzOYDtH4Izkk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\":\"type\",\r\n    \"brand\":\"brand\",\r\n    \"model\":\"model\",\r\n    \"notes\":\"notes\",\r\n    \"name\":\"anna\",\r\n    \"email\":\"77@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/cars/suggestion",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"cars",
+						"suggestion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upgrade premium",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiI3N0BnbWFpbC5jb20iLCJpYXQiOjE3MTA3NDU5NzUsImV4cCI6MTcxMDc0Nzc3NX0.B2Vx6PeNhrQoTh7vSBdmemOMXQgxba9OgnFW1m4v8KQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/profile/upgrade",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profile",
+						"upgrade"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "profile postings",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiJhYWFAZ21haWwuY29tIiwiaWF0IjoxNzEwMzU2OTQ0LCJleHAiOjE3MTAzNTg3NDR9.LmWvjF8oz58PagzA6BLjKisd9MaQSVh0oF24Xw9ObLg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/profile/postings",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"profile",
+						"postings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single posting",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJTRUxMRVIiXSwic3ViIjoiYmJAZ21haWwuY29tIiwiaWF0IjoxNzEwNTAxMjk0LCJleHAiOjE3MTA1MDMwOTR9.ZfYuOpTpoJOZk_LiUWNZwKRzRFboOPkkDdCdChu2LHg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/postings/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"postings",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all postings",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiJhYWFAZ21haWwuY29tIiwiaWF0IjoxNzEwMzU2OTQ0LCJleHAiOjE3MTAzNTg3NDR9.LmWvjF8oz58PagzA6BLjKisd9MaQSVh0oF24Xw9ObLg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/postings",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"postings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save view",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiI3N0BnbWFpbC5jb20iLCJpYXQiOjE3MTA3NDU5NzUsImV4cCI6MTcxMDc0Nzc3NX0.B2Vx6PeNhrQoTh7vSBdmemOMXQgxba9OgnFW1m4v8KQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/postings/1/views",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"postings",
+						"1",
+						"views"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get posting info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJTRUxMRVIiXSwic3ViIjoiNzdAZ21haWwuY29tIiwiaWF0IjoxNzEwNzUxNDczLCJleHAiOjE3MTA3NTMyNzN9.HB2cFvLIYB-zRDuq4JtGqa8bIx-XOUQ94tPo4zRBPqk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/postings/4/info",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"postings",
+						"4",
+						"info"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update profanity",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJCVVlFUiJdLCJzdWIiOiJiYkBnbWFpbC5jb20iLCJpYXQiOjE3MTA1NzcxNzIsImV4cCI6MTcxMDU3ODk3Mn0.bnsxH79VrN6XcpishaZ4K69ZwwPaCqCiWq5CqEO8SxI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "description",
+							"value": " for everyday commuting. It has a clean title and has been well-maintained.",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/postings/1/update-after-profanity",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"postings",
+						"1",
+						"update-after-profanity"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
